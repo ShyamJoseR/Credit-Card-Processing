@@ -225,6 +225,37 @@
         const minDue = interest * 10;
         document.getElementById('minDueResult').innerText = `Minimum Amount Due: $${minDue.toFixed(2)}`;
     });
+
+    document.addEventListener('DOMContentLoaded', function () {
+    const box1Inputs = document.querySelectorAll('#yearBase, #interestStartDebit, #interestStartCredit, #interestRate, #accruedThroughDate');
+    const buttons = document.querySelectorAll('#addDebitTransaction, #addCreditTransaction, #calculateInterest, #calculateMinDue');
+
+    function validateBox1Inputs() {
+        for (let input of box1Inputs) {
+            if (input.value.trim() === '' || (input.id === 'interestRate' && !/^\d+(\.\d{1,7})?\%?$/.test(input.value))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function toggleButtons() {
+        const allValid = validateBox1Inputs();
+        for (let button of buttons) {
+            button.disabled = !allValid;
+        }
+    }
+
+    for (let input of box1Inputs) {
+        input.addEventListener('input', toggleButtons);
+        input.addEventListener('change', toggleButtons);
+    }
+
+    toggleButtons(); // Initial validation check
+});
+
+    
+
 </script>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
