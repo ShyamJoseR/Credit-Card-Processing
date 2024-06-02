@@ -42,6 +42,7 @@ document.getElementById('addCreditTransaction').addEventListener('click', functi
     const transactionDate = new Date(date);
     const days = Math.ceil((accruedDate - transactionDate) / (1000 * 60 * 60 * 24));
     const interest = calculateInterest(parseFloat(amount.replace(/[^\d.-]/g, '')), days, rate);
+    
 
     creditTransactions.push({ amount, date, interest });
     renderTable('creditTable', creditTransactions);
@@ -60,22 +61,31 @@ function renderTable(tableId, transactions) {
 }
 
 document.getElementById('calculateInterest').addEventListener('click', function () {
+    // const currencyDecimalPlaces = parseInt(currencyDecimalPlacesSelect.value, 10);
+    const currencyDecimalPlaces = 2;
+    const interestResultOutput = document.getElementById('interestResult');
     const debitInterest = debitTransactions.reduce((sum, t) => sum + t.interest, 0);
     const creditInterest = creditTransactions.reduce((sum, t) => sum + t.interest, 0);
     const totalInterest = debitInterest - creditInterest;
-    document.getElementById('interestResult').innerText = `Interest: $${totalInterest.toFixed(2)}`;
+    // document.getElementById('interestResult1').innerText = `Interest: $${totalInterest.toFixed(2)}`;
+    interestResultOutput.value = formatCurrency(totalInterest, currencyDecimalPlaces);
 });
 
-document.getElementById('calculateMinDue').addEventListener('click', function () {
-    const interestText = document.getElementById('interestResult').innerText;
-    const interest = parseFloat(interestText.replace(/[^0-9.-]+/g, ""));
-    const minDue = interest * 10;
-    document.getElementById('minDueResult').innerText = `Minimum Amount Due: $${minDue.toFixed(2)}`;
-});
+// document.getElementById('calculateMinDue').addEventListener('click', function () {
+//     const interestText = document.getElementById('interestResult').innerText;
+//     const interest = parseFloat(interestText.replace(/[^0-9.-]+/g, ""));
+//     const minDue = interest * 10;
+//     document.getElementById('minDueResult').innerText = `Minimum Amount Due: $${minDue.toFixed(2)}`;
+// });
+
+function formatCurrency(value, decimalPlaces) {
+    return `$${value.toFixed(decimalPlaces)}`;
+}
 
 document.addEventListener('DOMContentLoaded', function () {
 const box1Inputs = document.querySelectorAll('#yearBase, #interestStartDebit, #interestStartCredit, #interestRate, #accruedThroughDate');
 const buttons = document.querySelectorAll('#addDebitTransaction, #addCreditTransaction, #calculateInterest, #calculateMinDue');
+
 
 function validateBox1Inputs() {
     for (let input of box1Inputs) {
