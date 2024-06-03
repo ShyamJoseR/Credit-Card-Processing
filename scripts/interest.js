@@ -27,7 +27,7 @@ document.getElementById('addDebitTransaction').addEventListener('click', functio
     const rate = parseFloat(document.getElementById('interestRate').value.replace(/[^\d.-]/g, '')) / 100;
     const accruedDate = new Date(document.getElementById('accruedThroughDate').value);
     const transactionDate = new Date(date);
-    const days = Math.ceil((accruedDate - transactionDate) / (1000 * 60 * 60 * 24));
+    const days = Math.ceil((accruedDate - transactionDate + 1) / (1000 * 60 * 60 * 24));
     const interest = calculateInterest(parseFloat(amount.replace(/[^\d.-]/g, '')), days, rate);
 
     debitTransactions.push({ amount, date, interest });
@@ -40,7 +40,7 @@ document.getElementById('addCreditTransaction').addEventListener('click', functi
     const rate = parseFloat(document.getElementById('interestRate').value.replace(/[^\d.-]/g, '')) / 100;
     const accruedDate = new Date(document.getElementById('accruedThroughDate').value);
     const transactionDate = new Date(date);
-    const days = Math.ceil((accruedDate - transactionDate) / (1000 * 60 * 60 * 24));
+    const days = Math.ceil((accruedDate - transactionDate + 1) / (1000 * 60 * 60 * 24));
     const interest = calculateInterest(parseFloat(amount.replace(/[^\d.-]/g, '')), days, rate);
     
 
