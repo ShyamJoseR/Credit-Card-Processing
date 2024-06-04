@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card Validator</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- <link rel="stylesheet" href="style.css"> -->
+    <link rel="stylesheet" href="../styles/Luhn.css">
+    <!-- <link rel="stylesheet" href="../styles/styles.css"> -->
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center mt-4">Card Validator</h1>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4>Card Generator</h4>
+                    </div>
+                    <div class="card-body">
+                        <!-- <div class="form-group row">
+                            <div class="col-sm-4">
+                                <input type="text" id="binNumber" class="form-control" placeholder="BIN Number">
+                            </div>
+                            <div class="col-sm-4">
+                                <img id="schemeIcon" src="" alt="Scheme Icon" class="img-fluid">
+                            </div>
+                            <div class="col-sm-4">
+                                <span id="numOfDigits"></span>
+                            </div>
+                        </div> -->
+
+                        <div class="form-group row">
+                            <div class="col-sm-4">
+                                <input type="text" id="binNumber" class="form-control" placeholder="BIN Number">
+                            </div>
+                            <div class="col-sm-2">
+                                <img id="schemeIcon" src="https://cdn-icons-png.flaticon.com/512/10616/10616584.png" alt="Scheme Icon" class="img-fluid scheme-icon">
+                            </div>
+                            <div class="col-sm-3">
+                                <span id="numOfDigits"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-sm-6">
+                                <input type="number" id="limit" class="form-control" placeholder="Limit">
+                            </div>
+                            <div class="col-sm-6">
+                                <button id="generateCards" class="btn btn-primary">Generate</button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <textarea id="displayArea" class="form-control" rows="5" readonly></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4>Reference Number Generator</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <select id="startsWith" class="form-control">
+                                <option value="2">2</option>
+                                <option value="5">5</option>
+                                <option value="7" selected>7</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="acquirerBin" class="form-control" placeholder="Acquirer's Bank Identification Number (BIN)">
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-6">
+                                <input type="date" id="transactionDate" class="form-control">
+                            </div>
+                            <div class="col-sm-6">
+                                <span id="formattedDate"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-6">
+                                <input type="number" id="refLimit" class="form-control" placeholder="Limit">
+                            </div>
+                            <div class="col-sm-6">
+                                <button id="generateRefNumbers" class="btn btn-primary">Generate</button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <textarea id="refDisplayArea" class="form-control" rows="5" readonly></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Check Digit Calculator</h4>
+                        <h6 class="text-muted">using Luhn's Algorithm</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <div class="col-sm-6">
+                                <input type="text" id="cardNumber" class="form-control" placeholder="Card Number">
+                            </div>
+                            <div class="col-sm-6">
+                                <span id="cardCheckDigit"></span>
+                            </div>
+                        </div>
+                        <div id="cardMessage" class="mb-3"></div>
+                        <div class="form-group row">
+                            <div class="col-sm-6">
+                                <input type="text" id="refNumber" class="form-control" placeholder="Reference Number">
+                            </div>
+                            <div class="col-sm-6">
+                                <span id="refCheckDigit"></span>
+                            </div>
+                        </div>
+                        <div id="refMessage" class="mb-3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- <script src="script.js"></script> -->
+    <script src="../scripts/Luhn.js" type="text/javascript"></script>
+</body>
+</html>
