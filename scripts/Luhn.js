@@ -232,7 +232,7 @@ function validateRefNumber() {
 // Luhn's Algorithm
 function calculateLuhnCheckDigit(number) {
     let sum = 0;
-    let isEvenIndex = false;
+    let isEvenIndex = true;
 
     for (let i = number.length - 1; i >= 0; i--) {
         let digit = parseInt(number[i]);
