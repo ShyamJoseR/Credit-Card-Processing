@@ -67,32 +67,83 @@ function generateCardNumber(binNumber, numOfDigits) {
 document.getElementById('transactionDate').addEventListener('input', updateFormattedDate);
 document.getElementById('generateRefNumbers').addEventListener('click', generateRefNumbers);
 
+// function updateFormattedDate() {
+//     const transactionDate = document.getElementById('transactionDate').value;
+//     const formattedDate = document.getElementById('formattedDate');
+
+//     if (transactionDate) {
+//         const year = transactionDate.slice(2, 4);
+//         const month = transactionDate.slice(5, 7);
+//         const day = transactionDate.slice(8, 10);
+//         const yddd = year + (month + day).padStart(3, '0');
+//         formattedDate.textContent = yddd;
+//     } else {
+//         formattedDate.textContent = '';
+//     }
+// }
+
 function updateFormattedDate() {
     const transactionDate = document.getElementById('transactionDate').value;
     const formattedDate = document.getElementById('formattedDate');
 
     if (transactionDate) {
         const year = transactionDate.slice(2, 4);
-        const month = transactionDate.slice(5, 7);
-        const day = transactionDate.slice(8, 10);
-        const yddd = year + (month + day).padStart(3, '0');
+        const month = parseInt(transactionDate.slice(5, 7), 10);
+        const day = parseInt(transactionDate.slice(8, 10), 10);
+
+        const julianDate = calculateJulianDate(month, day);
+        const yddd = year + julianDate.toString().padStart(3, '0');
+
         formattedDate.textContent = yddd;
     } else {
         formattedDate.textContent = '';
     }
 }
 
+function calculateJulianDate(month, day) {
+    const daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    let julianDate = day;
+
+    for (let i = 0; i < month - 1; i++) {
+        julianDate += daysInMonth[i];
+    }
+
+    // Check if it's a leap year and the date is after February
+    const year = parseInt(document.getElementById('transactionDate').value.slice(0, 4), 10);
+    if (isLeapYear(year) && month > 2) {
+        julianDate++;
+    }
+
+    return julianDate;
+}
+
+function isLeapYear(year) {
+    return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
+}
+
 function generateRefNumbers() {
     const startsWith = document.getElementById('startsWith').value;
     const acquirerBin = document.getElementById('acquirerBin').value;
     const transactionDate = document.getElementById('transactionDate').value;
+    // const transactionDate = document.getElementById('formattedDate'.value);
     const limit = parseInt(document.getElementById('refLimit').value);
     const refDisplayArea = document.getElementById('refDisplayArea');
 
-    const year = transactionDate.slice(2, 4);
-    const month = transactionDate.slice(5, 7);
-    const day = transactionDate.slice(8, 10);
-    const yddd = year + (month + day).padStart(3, '0');
+    
+        const year = transactionDate.slice(3, 4);
+        const month = parseInt(transactionDate.slice(5, 7), 10);
+        const day = parseInt(transactionDate.slice(8, 10), 10);
+
+        const julianDate = calculateJulianDate(month, day);
+        const yddd = year + julianDate.toString().padStart(3, '0');
+
+        formattedDate.textContent = yddd;
+    
+
+    // const year = transactionDate.slice(2, 4);
+    // const month = transactionDate.slice(5, 7);
+    // const day = transactionDate.slice(8, 10);
+    // const yddd = year + (month + day).padStart(3, '0');
 
     refDisplayArea.value = '';
 
