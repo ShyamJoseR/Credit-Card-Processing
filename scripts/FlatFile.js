@@ -225,6 +225,53 @@ document.addEventListener('DOMContentLoaded', function () {
         newWindow.onload = function () {
             const recordForm = newWindow.document.getElementById('recordForm');
 
+            ///////////////////////////////////
+            const fields = JSON.parse(localStorage.getItem('fields'));
+
+            // Function to update the record display area and total record length
+            function updateRecordDisplay() {
+                const inputs = recordForm.querySelectorAll('input');
+                let record = '';
+                inputs.forEach(input => {
+                    let value = input.value;
+                    const format = input.dataset.format;
+                    const length = parseInt(input.dataset.length, 10);
+
+                    if (value.length < length) {
+                        if (format === 'String') {
+                            value = value.padEnd(length, ' ');
+                        } else if (format === 'Numeric') {
+                            value = value.padStart(length, '0');
+                        }
+                    } else if (value.length > length) {
+                        value = value.substring(0, length);
+                    }
+
+                    record += value;
+                });
+
+                fields.forEach(field => {
+                    const label = document.createElement('label');
+                    label.textContent = field.fieldName;
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    input.value = field.defaultValue || '';
+                    if (field.customLogics === 'Final') {
+                        input.readOnly = true;
+                    }
+                    input.dataset.format = field.format;
+                    input.dataset.length = field.length;
+                    input.addEventListener('input', updateRecordDisplay);  // Add event listener
+                    recordForm.appendChild(label);
+                    recordForm.appendChild(input);
+                });
+
+                //////////////////
+
+                displayArea.textContent = record;
+                totalRecordLengthLabel.textContent = `Total Record Length = ${record.length}`;
+            }
+
             // Create form fields based on layout file content
             const layoutFieldsList = completeLayoutsMap.get(selectedLayout);
             const layoutFields = [];
@@ -286,21 +333,55 @@ document.addEventListener('DOMContentLoaded', function () {
                 recordForm.appendChild(fieldContainer);
             });
 
+            const displayArea = document.createElement('div');
+            displayArea.id = 'recordDisplayArea';
+            recordForm.appendChild(displayArea);
+
+            const totalRecordLengthLabel = document.createElement('label');
+            totalRecordLengthLabel.id = 'totalRecordLength';
+            recordForm.appendChild(totalRecordLengthLabel);
+
+            const inputs = recordForm.querySelectorAll('input');
+            let record = '';
+            inputs.forEach(input => {
+                let value = input.value;
+                const format = input.dataset.format;
+                const length = parseInt(input.dataset.length, 10);
+
+                if (value.length < length) {
+                    if (format === 'String') {
+                        value = value.padEnd(length, ' ');
+                    } else if (format === 'Numeric') {
+                        value = value.padStart(length, '0');
+                    }
+                } else if (value.length > length) {
+                    value = value.substring(0, length);
+                }
+
+                record += value;
+            });
+
+            displayArea.textContent = record;
+            totalRecordLengthLabel.textContent = `Total Record Length = ${record.length}`;
+
+
             const addButton = newWindow.document.createElement('button');
             addButton.textContent = 'Add';
             addButton.type = 'button';
             addButton.onclick = function () {
-                const formData = new FormData(recordForm);
-                let record = '';
-                layoutFields.forEach(field => {
-                    let value = formData.get(field.name);
-                    if (field.format === 'Numeric') {
-                        value = value.padStart(field.length, '0');
-                    } else {
-                        value = value.padEnd(field.length, ' ');
-                    }
-                    record += value;
-                });
+
+
+                // const formData = new FormData(recordForm);
+                // let record = '';
+                // layoutFields.forEach(field => {
+                //     let value = formData.get(field.name);
+                //     if (field.format === 'Numeric') {
+                //         value = value.padStart(field.length, '0');
+                //     } else {
+                //         value = value.padEnd(field.length, ' ');
+                //     }
+                //     record += value;
+                // });
                 fileContentArea.value += record + '\n';
                 newWindow.close();
             };
@@ -312,8 +393,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 newWindow.close();
             };
 
+
             recordForm.appendChild(addButton);
             recordForm.appendChild(cancelButton);
+
+            
+            // Initial update to display the default values
+            updateRecordDisplay();
         };
     });
 
@@ -326,4 +412,6 @@ document.addEventListener('DOMContentLoaded', function () {
         a.click();
         URL.revokeObjectURL(url);
     });
+
+
 });
