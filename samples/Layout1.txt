@@ -1,0 +1,5 @@
+Field Name,Format,Length,Default Value,Custom Logics
+Field 1,Numeric,5,56,Final
+SField 2,String,7,Shyam,Final
+NField 3,Numeric, 10,,
+Field 4,String,25,,
