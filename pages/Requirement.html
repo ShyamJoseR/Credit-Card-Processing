@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Requirements Creator</title>
+    <link rel="stylesheet" href="../styles/common.css">
+    <link rel="stylesheet" href="../styles/styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+        }
+        .checkbox-group input {
+            margin-right: 5px;
+        }
+        .requirements {
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        .button-group {
+            text-align: center;
+        }
+        .button-group button {
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        .hidden {
+            display: none;
+        }
+        .error {
+            color: red;
+            font-size: 0.9em;
+        }
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Requirements Creator</h1>
+        <button class="back-button hidden" onclick="editForm()">Back</button>
+        <div id="formSection">
+            <div class="form-group">
+                <label for="projectId">Project ID <span class="error" id="projectIdError"></span></label>
+                <input type="text" id="projectId" required>
+            </div>
+            <div class="form-group">
+                <label for="projectName">Project Name <span class="error" id="projectNameError"></span></label>
+                <input type="text" id="projectName" required>
+            </div>
+            <div class="form-group">
+                <label for="clientName">Client Name <span class="error" id="clientNameError"></span></label>
+                <input type="text" id="clientName" required>
+            </div>
+            <div class="form-group">
+                <label>Applications</label>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" value="MS"> MS</label>
+                    <label><input type="checkbox" value="AS"> AS</label>
+                    <label><input type="checkbox" value="AMS"> AMS</label>
+                    <label><input type="checkbox" value="Ments"> Ments</label>
+                    <label><input type="checkbox" value="Coll"> Coll</label>
+                    <label><input type="checkbox" value="MX"> MX</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Requirements <span class="error" id="requirementsError"></span></label>
+                <div id="requirementsContainer" class="requirements">
+                    <!-- Requirements will be added dynamically here -->
+                </div>
+                <button type="button" onclick="addRequirement()">Add Requirement</button>
+            </div>
+            <div class="button-group">
+                <button type="button" onclick="submitForm()">Submit</button>
+            </div>
+        </div>
+
+        <div id="tableSection" class="hidden">
+            <h2>Submitted Data</h2>
+            <table id="submittedDataTable">
+                <thead>
+                    <tr>
+                        <th>Input Field</th>
+                        <th>Input Value</th>
+                    </tr>
+                </thead>
+                <tbody id="submittedDataBody"></tbody>
+            </table>
+            <h2>Requirements</h2>
+            <table id="requirementsTable">
+                <thead>
+                    <tr>
+                        <th>Requirement</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody id="requirementsBody"></tbody>
+            </table>
+            <div class="button-group">
+                <button onclick="generateExcel()">Generate Excel</button>
+                <button onclick="generateWord()">Generate Word</button>
+                <button onclick="generatePDF()">Generate PDF</button>
+            </div>
+        </div>
+    </div>
+
+    
+    <footer>
+        <p>Developed by <strong>Manimurugan M</strong>.</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script>
+        let requirementIndex = 0;
+
+        function addRequirement() {
+            requirementIndex++;
+            const requirementsContainer = document.getElementById('requirementsContainer');
+
+            const requirementDiv = document.createElement('div');
+            requirementDiv.className = 'form-group';
+            requirementDiv.innerHTML = `
+                <label for="requirement${requirementIndex}">R${requirementIndex}</label>
+                <input type="text" id="requirement${requirementIndex}" required>
+            `;
+
+            requirementsContainer.appendChild(requirementDiv);
+        }
+
+        function validateForm() {
+            let isValid = true;
+            const requiredFields = ['projectId', 'projectName', 'clientName'];
+            const requirementsContainer = document.getElementById('requirementsContainer');
+
+            requiredFields.forEach(field => {
+                const input = document.getElementById(field);
+                const error = document.getElementById(field + 'Error');
+                if (!input.value.trim()) {
+                    isValid = false;
+                    error.textContent = 'This field is required';
+                } else {
+                    error.textContent = '';
+                }
+            });
+
+            const requirementsInputs = requirementsContainer.querySelectorAll('input[type="text"]');
+            requirementsInputs.forEach((input, index) => {
+                if (!input.value.trim()) {
+                    isValid = false;
+                    document.getElementById('requirementsError').textContent = `Requirement R${index + 1} is required`;
+                }
+            });
+
+            return isValid;
+        }
+
+        function submitForm() {
+            if (!validateForm()) {
+                return;
+            }
+
+            const projectId = document.getElementById('projectId').value;
+            const projectName = document.getElementById('projectName').value;
+            const clientName = document.getElementById('clientName').value;
+            const applications = Array.from(document.querySelectorAll('.checkbox-group input:checked')).map(checkbox => checkbox.value);
+
+            const submittedDataBody = document.getElementById('submittedDataBody');
+            const requirementsBody = document.getElementById('requirementsBody');
+            const rows = [];
+
+            rows.push(`<tr><td>Project ID</td><td>${projectId}</td></tr>`);
+            rows.push(`<tr><td>Project Name</td><td>${projectName}</td></tr>`);
+            rows.push(`<tr><td>Client Name</td><td>${clientName}</td></tr>`);
+            rows.push(`<tr><td>Applications</td><td>${applications.join(', ')}</td></tr>`);
+
+            const requirementsRows = [];
+            for (let i = 1; i <= requirementIndex; i++) {
+                const requirement = document.getElementById(`requirement${i}`).value;
+                requirementsRows.push(`<tr><td>R${i}</td><td>${requirement}</td></tr>`);
+            }
+
+            submittedDataBody.innerHTML = rows.join('');
+            requirementsBody.innerHTML = requirementsRows.join('');
+
+            document.getElementById('formSection').classList.add('hidden');
+            document.getElementById('tableSection').classList.remove('hidden');
+            document.querySelector('.back-button').classList.remove('hidden');
+        }
+
+        function editForm() {
+            document.getElementById('formSection').classList.remove('hidden');
+            document.getElementById('tableSection').classList.add('hidden');
+            document.querySelector('.back-button').classList.add('hidden');
+        }
+
+        function generateExcel() {
+            const projectId = document.getElementById('projectId').value;
+            const projectName = document.getElementById('projectName').value;
+            const clientName = document.getElementById('clientName').value;
+            const applications = Array.from(document.querySelectorAll('.checkbox-group input:checked')).map(checkbox => checkbox.value);
+
+            const wb = XLSX.utils.book_new();
+            const wsData = [
+                ['Project ID', projectId],
+                ['Project Name', projectName],
+                ['Client Name', clientName],
+                ['Applications', applications.join(', ')]
+            ];
+
+            for (let i = 1; i <= requirementIndex; i++) {
+                const requirement = document.getElementById(`requirement${i}`).value;
+                wsData.push([`R${i}`, requirement]);
+            }
+
+            const ws = XLSX.utils.aoa_to_sheet(wsData);
+            XLSX.utils.book_append_sheet(wb, ws, 'Project Details');
+            XLSX.writeFile(wb, 'project.xlsx');
+        }
+
+        function generateWord() {
+    const projectId = document.getElementById('projectId').value;
+    const projectName = document.getElementById('projectName').value;
+    const clientName = document.getElementById('clientName').value;
+    const applications = Array.from(document.querySelectorAll('.checkbox-group input:checked')).map(checkbox => checkbox.value);
+    const requirements = [];
+
+    for (let i = 1; i <= requirementIndex; i++) {
+        const requirement = document.getElementById(`requirement${i}`).value;
+        requirements.push(`${requirement}`);
+        // Use the below line of code for getting Requirments in Iteration,for example : " R1: ajnajiidad"
+       // requirements.push(`R${i}: ${requirement}`);
+    }
+
+    let content = `
+        <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+        <head><meta charset='utf-8'><title>RCE Project Details</title></head>
+        <body>
+            <h1>Project Details</h1>
+            <p><strong>Project ID:</strong> ${projectId}</p>
+            <p><strong>Project Name:</strong> ${projectName}</p>
+            <p><strong>Client Name:</strong> ${clientName}</p>
+            <p><strong>Applications:</strong> ${applications.join(', ')}</p>
+            <h2>Requirements</h2>
+    `;
+
+    // Generate separate borders for each requirement
+    requirements.forEach((req, index) => {
+        content += `
+            <table style="width: 100%; border-collapse: collapse; border: 1px solid black; margin-bottom: 10px;">
+                <tr>
+                    <td style="border-bottom: 1px solid black; padding: 8px;"><strong>R${index + 1}</strong></td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px;">${req}</td>
+                </tr>
+            </table>
+        `;
+    });
+
+    content += `
+        </body>
+        </html>
+    `;
+
+    const blob = new Blob(['\ufeff', content], {
+        type: 'application/msword'
+    });
+
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'project.doc';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}
+        function generatePDF() {
+            const projectId = document.getElementById('projectId').value;
+            const projectName = document.getElementById('projectName').value;
+            const clientName = document.getElementById('clientName').value;
+            const applications = Array.from(document.querySelectorAll('.checkbox-group input:checked')).map(checkbox => checkbox.value);
+
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            let y = 20;
+            doc.text('Project Details', 105, y, { align: 'center' });
+            y += 10;
+            doc.text(`Project ID: ${projectId}`, 20, y);
+            y += 10;
+            doc.text(`Project Name: ${projectName}`, 20, y);
+            y += 10;
+            doc.text(`Client Name: ${clientName}`, 20, y);
+            y += 10;
+            doc.text(`Applications: ${applications.join(', ')}`, 20, y);
+
+            for (let i = 1; i <= requirementIndex; i++) {
+                const requirement = document.getElementById(`requirement${i}`).value;
+                y += 10;
+                doc.text(`R${i}: ${requirement}`, 20, y);
+            }
+
+            doc.save('project.pdf');
+        }
+    </script>
+</body>
+</html>
