@@ -1,47 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Credit Card Processing</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="./styles/styles.css">
-    <link rel="stylesheet" type="text/css" href="./styles/statusbar.css">
+    <!-- <link rel="stylesheet" type="text/css" href="./styles/statusbar.css"> -->
+    <link rel="stylesheet" type="text/css" href="./styles/sidebar.css">
 </head>
+
 <body>
-    <div class="sidebar">
+    <!-- <div class="sidebar" id="sidebar">
+        <div class="sidebar-toggle" id="sidebarToggle">&#9776;</div>
         <div class="sidebar-title">Menu</div>
-        <a href="index.html">Home</a>
-        <a href="interest-calculation.html">Interest Calculation</a>
-        <a href="minimum-due-calculation.html">Minimum Due Calculation</a>
-        <a href="card-validator.html">Card Validator</a>
-    </div>
+        <a href="index.html"><i class="fas fa-home"></i> <span class="link-text">Home</span></a>
+        <a href="./pages/Interest Calculator.html"><i class="fas fa-percentage"></i> <span class="link-text">Interest Calculation</span></a>
+        <a href="./pages/Due Calculator.html"><i class="fas fa-calculator"></i> <span class="link-text">Minimum Due Calculation</span></a>
+        <a href="./pages/Luhn.html"><i class="fas fa-credit-card"></i> <span class="link-text">Card Validator</span></a>
+    </div> -->
 
-<div class="container">
-    <h1>Credit Card Processing</h1>
-    <div class="row">
-        <!-- First Box -->
-        <div class="col-md-4 box">
-            <h3><a href="./pages/Interest Calculator.html">Interest Calculation</a></h3>
+    <!-- Include the sidebar -->
+    <div id="sidebar-container">
+        <div id="trigram" name="test1" class="trigram sidebar-data collapsed">&#9776;</div> <!-- Trigram for Heaven symbol -->
+        <div id="sidebar" class="sidebar collapsed">
+            
+            <div class="sidebar-item">
+                <i class="icon-home"></i>
+                <span class="sidebar-text">Home</span>
+            </div>
+            <div class="sidebar-item">
+                <i class="icon-calculator"></i>
+                <span class="sidebar-text">Calculator</span>
+            </div>
+            <!-- Add more sidebar items as needed -->
+            
         </div>
-
-        <!-- Second Box -->
-        <div class="col-md-4 box">
-            <h3><a href="./pages/Due Calculator.html">Minimum Due Calculation</a></h3>
-        </div>      
-        
-        <!-- Second Box -->
-        <div class="col-md-4 box">
-            <h3><a href="./pages/Luhn.html">Card Validator</a></h3>
-        </div>  
-
+        <div id="E-mail" name="test1"  class="E-mail sidebar-data collapsed">&#128231;</div> <!-- E-mail symbol -->
     </div>
-</div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script src="./scripts/interest.js" type="text/javascript"></script>
-<script src="./scripts/statusbar.js" type="text/javascript"></script>
+    <div class="container">
+        <h1>Credit Card Processing</h1>
+        <div class="row">
+            <!-- First Box -->
+            <div class="col-md-4 box">
+                <h3><a href="./pages/Interest Calculator.html">Interest Calculation</a></h3>
+            </div>
+
+            <!-- Second Box -->
+            <div class="col-md-4 box">
+                <h3><a href="./pages/Due Calculator.html">Minimum Due Calculation</a></h3>
+            </div>
+
+            <!-- Second Box -->
+            <div class="col-md-4 box">
+                <h3><a href="./pages/Luhn.html">Card Validator</a></h3>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="./scripts/interest.js" type="text/javascript"></script>
+    <script src="./scripts/statusbar.js" type="text/javascript"></script>
+    <script src="./scripts/sidebar.js" type="text/javascript"></script>
 </body>
+
 </html>

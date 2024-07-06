@@ -1,4 +1,4 @@
-/* styles.css */
+/* styles.css
 
 body {
     font-family: Arial, sans-serif;
@@ -51,4 +51,114 @@ h1 {
 
 .sidebar a.active {
     background-color: #575757;
+} */
+
+
+
+
+/* styles.css */
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.sidebar {
+    width: 250px;
+    background-color: #333;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    padding-top: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, width 0.3s ease;
+    position: relative;
+}
+
+.sidebar.collapsed {
+    width: 80px;
+    transition: width 0.3s ease;
+}
+
+.sidebar-toggle {
+    font-size: 1.5em;
+    cursor: pointer;
+    text-align: center;
+    padding: 10px;
+    background-color: #444;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+.sidebar-title {
+    text-align: center;
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    color: #f1c40f;
+    display: none;
+}
+
+.sidebar a {
+    padding: 15px 20px;
+    text-decoration: none;
+    font-size: 1.2em;
+    color: white;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.3s, padding-left 0.3s;
+}
+
+.sidebar a .link-text {
+    margin-left: 10px;
+    display: inline-block;
+    white-space: nowrap;
+}
+
+.sidebar a:hover {
+    background-color: #575757;
+}
+
+.sidebar.collapsed a {
+    justify-content: center;
+}
+
+.sidebar.collapsed a .link-text {
+    display: none;
+}
+
+.main-content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    transition: margin-left 0.3s ease;
+}
+
+.main-content.collapsed {
+    margin-left: 80px;
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        width: 250px;
+        transform: translateX(-250px);
+    }
+
+    .sidebar.collapsed {
+        transform: translateX(0);
+        width: 80px;
+    }
+
+    .main-content {
+        margin-left: 0;
+    }
+
+    .main-content.collapsed {
+        margin-left: 80px;
+    }
 }

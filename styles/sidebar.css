@@ -1,0 +1,88 @@
+body {
+    display: flex;
+}
+
+#sidebar {
+    /* width: 50px; */
+    width: 0rem;
+    /* height: 0rem; */
+    transition: width 0.3s, font-size 0.3s;
+    background-color: #333;
+    color: #fff;
+    /* height: 100%; */
+    overflow: hidden;
+}
+
+#sidebar.expanded {
+    width: 10rem;
+    /* font-size: 1.2em; */
+    font-size: 1.2rem;
+}
+
+#sidebar.collapsed {
+    width: 0rem;
+    height: 0rem;
+    /* font-size: 1.2em; */
+    font-size: 1rem;
+}
+
+.trigram {
+    font-size: 1.5rem;
+    text-align: center;
+    padding: 10px;
+    cursor: pointer;
+    transition: font-size 0.3s;
+}
+
+#trigram.expanded .trigram {
+    font-size: 2rem;
+}
+#trigram.collapsed .trigram {
+    font-size: 1rem;
+}
+
+.sidebar-data {
+    font-size: 1.5rem;
+    text-align: center;
+    padding: 10px;
+    cursor: pointer;
+    transition: font-size 0.3s;
+}
+
+.sidebar-data.expanded {
+    font-size: 2rem;
+}
+.sidebar-data.collapsed  {
+    font-size: 1rem;
+}
+
+
+
+
+
+.sidebar-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}
+
+.icon-home, .icon-calculator {
+    /* font-size: 1.5em; */
+    font-size: 1.5rem;
+    margin-right: 10px;
+    transition: font-size 0.3s;
+}
+
+#sidebar.expanded .icon-home, #sidebar.expanded .icon-calculator {
+    /* font-size: 2em; */
+    font-size: 2rem;
+}
+
+.sidebar-text {
+    display: none;
+    white-space: nowrap;
+}
+
+#sidebar.expanded .sidebar-text {
+    display: inline;
+}
