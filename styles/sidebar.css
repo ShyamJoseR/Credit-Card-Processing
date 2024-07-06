@@ -14,8 +14,9 @@ body {
 }
 
 #sidebar.expanded {
-    width: 10rem;
-    /* font-size: 1.2em; */
+    /* width: 15rem; */
+    width: 15vmax;
+
     font-size: 1.2rem;
 }
 
@@ -32,6 +33,10 @@ body {
     padding: 10px;
     cursor: pointer;
     transition: font-size 0.3s;
+}
+
+.link-text{
+    font-size: 1rem;
 }
 
 #trigram.expanded .trigram {
@@ -62,6 +67,7 @@ body {
 
 .sidebar-item {
     display: flex;
+    height: 3vmax;
     align-items: center;
     padding: 10px;
 }
