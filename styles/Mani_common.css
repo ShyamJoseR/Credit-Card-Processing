@@ -1,0 +1,183 @@
+/* General Styles */
+/* body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container {
+    width: 90%;
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 20px;
+    background: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+} */
+
+/* Header Styles */
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+h2 {
+    margin-bottom: 10px;
+}
+
+/* Form Styles */
+/* .form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group input[type="file"],
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.form-group .error {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+} */
+
+/* Checkbox Group */
+.checkbox-group {
+    margin-bottom: 15px;
+}
+
+.checkbox-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.checkbox-group input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+.checkbox-group .checkbox-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.checkbox-group .checkbox-wrapper label {
+    margin-right: 15px;
+}
+
+/* Requirements Styles */
+/* .requirements {
+    margin-bottom: 20px;
+}
+
+.requirements .form-group {
+    display: flex;
+    align-items: center;
+}
+
+.requirements .form-group label {
+    flex: 0 0 50px;
+}
+
+.requirements .form-group input {
+    flex: 1;
+    margin-left: 10px;
+} */
+
+/* Buttons */
+button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+button[type="button"] {
+    background-color: #007bff;
+    color: white;
+}
+
+button[type="button"]:hover {
+    background-color: #0056b3;
+}
+
+button[type="submit"] {
+    background-color: #28a745;
+    color: white;
+}
+
+button[type="submit"]:hover {
+    background-color: #218838;
+}
+
+button[type="button"].back-button {
+    background-color: #6c757d;
+    color: white;
+}
+
+button[type="button"].back-button:hover {
+    background-color: #5a6268;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Table Styles */
+
+/* table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table th, table td {
+    border: 1px solid #dee2e6;
+    padding: 10px;
+    text-align: left;
+}
+
+table th {
+    background-color: #e9ecef;
+    font-weight: bold;
+}
+
+.table-section {
+    margin-top: 30px;
+}
+
+.table-section h2 {
+    margin-bottom: 10px;
+} */
+
+/* Utility Classes */
+/* .text-center {
+    text-align: center;
+}
+
+.mt-20 {
+    margin-top: 20px;
+}
+
+.mb-20 {
+    margin-bottom: 20px;
+} */

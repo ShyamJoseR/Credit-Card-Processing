@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Script Generator</title>
+    <link rel="stylesheet" href="../styles/common.css">
+    <link rel="stylesheet" href="../styles/styles.css">
+    <link rel="stylesheet" href="../styles/Mani_common.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        .form-group input[type="file"] {
+            margin: 0 auto;
+        }
+        .button-group {
+            margin-top: 20px;
+        }
+        .button-group button {
+            padding: 10px 20px;
+            margin: 5px;
+        }
+        .hidden {
+            display: none;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Test Script Generator</h1>
+        <div id="uploadSection">
+            <div class="form-group">
+                <label for="documentUpload">Upload your document (Excel, Word, PDF):</label>
+                <input type="file" id="documentUpload" accept=".xlsx,.xls,.doc,.docx,.pdf">
+            </div>
+            <div class="button-group">
+                <button type="button" onclick="uploadDocument()">Upload</button>
+            </div>
+        </div>
+        <div id="messageSection" class="hidden">
+            <button class="back-button" onclick="goBack()">Back</button>
+            <p id="uploadMessage"></p>
+            <div id="detailsSection"></div>
+            <div class="button-group">
+                <button type="button" onclick="generateTestScript()">Test Script Generator</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Developed by <strong>Manimurugan M</strong>.</p>
+    </footer>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.6.0/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.7.570/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/docxtemplater/3.22.1/docxtemplater.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/file-saver/2.0.5/FileSaver.min.js"></script>
+    <script>
+        let requirements = [];
+        let projectName = 'Project';
+
+        function uploadDocument() {
+            const fileInput = document.getElementById('documentUpload');
+            const file = fileInput.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const fileData = event.target.result;
+                    const fileType = file.name.split('.').pop().toLowerCase();
+                    if (fileType === 'doc' || fileType === 'docx') {
+                        extractFromWord(fileData);
+                    } else if (fileType === 'xlsx' || fileType === 'xls') {
+                        extractFromExcel(fileData);
+                    } else if (fileType === 'pdf') {
+                        extractFromPDF(fileData);
+                    }
+                };
+                reader.readAsArrayBuffer(file);
+            }
+        }
+
+        function extractFromWord(data) {
+            JSZip.loadAsync(data).then(function(zip) {
+                zip.file("word/document.xml").async("string").then(function(text) {
+                    parseRequirements(text);
+                });
+            }).catch(function(err) {
+                console.error("Failed to read Word document:", err);
+                alert("Failed to read Word document. Please make sure the file is a valid Word document.");
+            });
+        }
+
+        function extractFromExcel(data) {
+            const workbook = XLSX.read(data, { type: 'array' });
+            const sheetName = workbook.SheetNames[0];
+            const worksheet = workbook.Sheets[sheetName];
+            const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+            let text = '';
+            requirements = [];
+            jsonData.forEach(row => {
+                if (row[0] && row[0].startsWith('R') && row[1]) {
+                    requirements.push(row[1]);
+                }
+            });
+            parseRequirements(text);
+        }
+
+        function extractFromPDF(data) {
+            const pdfData = new Uint8Array(data);
+            pdfjsLib.getDocument({ data: pdfData }).promise.then(pdf => {
+                let text = '';
+                const totalPages = pdf.numPages;
+                let loadedPages = 0;
+                for (let i = 1; i <= totalPages; i++) {
+                    pdf.getPage(i).then(page => {
+                        page.getTextContent().then(textContent => {
+                            textContent.items.forEach(item => {
+                                text += item.str + ' ';
+                            });
+                            loadedPages++;
+                            if (loadedPages === totalPages) {
+                                parseRequirements(text);
+                            }
+                        });
+                    });
+                }
+            }).catch(function(err) {
+                console.error("Failed to read PDF document:", err);
+                alert("Failed to read PDF document. Please make sure the file is a valid PDF document.");
+            });
+        }
+
+        function parseRequirements(text) {
+            if (requirements.length === 0) {
+                const reqPattern = /R\d+:\s(.*?)\s/g;
+                let match;
+                while ((match = reqPattern.exec(text)) !== null) {
+                    requirements.push(match[1]);
+                }
+            }
+            if (requirements.length === 0) {
+                requirements.push('No requirements found.');
+            }
+            document.getElementById('uploadSection').classList.add('hidden');
+            document.getElementById('messageSection').classList.remove('hidden');
+            document.getElementById('uploadMessage').textContent = 'The document has been uploaded successfully.';
+            displayDetails();
+        }
+
+        function displayDetails() {
+            const detailsSection = document.getElementById('detailsSection');
+            detailsSection.innerHTML = '<h3>Requirements:</h3>';
+            let table = '<table><tr><th>Requirement</th></tr>';
+            requirements.forEach((req, index) => {
+                table += `<tr><td>R${index + 1}: ${req}</td></tr>`;
+            });
+            table += '</table>';
+            detailsSection.innerHTML += table;
+        }
+
+        function generateTestScript() {
+            const testCases = requirements.map((req, index) => {
+                return {
+                    'Test case No': `TC${index + 1}`,
+                    'Test Description': `${req}`,
+                    'Expected Result': `${req.toLowerCase()} successfully`
+                };
+            });
+
+            const worksheet = XLSX.utils.json_to_sheet(testCases);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, 'Test Scripts');
+
+            XLSX.writeFile(workbook, `${projectName}.xlsx`);
+        }
+
+        function goBack() {
+            document.getElementById('uploadSection').classList.remove('hidden');
+            document.getElementById('messageSection').classList.add('hidden');
+        }
+    </script>
+
+
+</body>
+</html>
